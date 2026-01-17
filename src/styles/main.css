@@ -572,6 +572,92 @@ body {
   color: var(--text-muted);
 }
 
+/* Mobile Header */
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  padding: 0 16px;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+}
+
+.mobile-header .logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobile-header .logo-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.mobile-header .logo-text {
+  font-size: 18px;
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  padding: 8px;
+  cursor: pointer;
+}
+
+/* Mobile Navigation Overlay */
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+}
+
+.mobile-nav-overlay.open {
+  display: block;
+}
+
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100vh;
+  background: var(--bg-secondary);
+  padding: 20px;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 201;
+}
+
+.mobile-nav.open {
+  transform: translateX(0);
+}
+
+.mobile-nav-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  padding: 8px;
+  cursor: pointer;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .balance-cards {
@@ -585,28 +671,188 @@ body {
   .admin-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .chart {
+    height: 300px;
+  }
 }
 
 @media (max-width: 768px) {
+  .mobile-header {
+    display: flex;
+  }
+
   .sidebar {
-    transform: translateX(-100%);
+    display: none;
   }
 
   .main-content {
     margin-left: 0;
+    margin-top: 60px;
+    padding: 16px;
     max-width: 100vw;
   }
 
-  .balance-cards {
-    grid-template-columns: 1fr;
+  .page-title {
+    font-size: 22px;
+    margin-bottom: 16px;
   }
 
-  .holdings-header,
-  .holdings-row {
+  .balance-cards {
     grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .balance-card {
+    padding: 14px;
+  }
+
+  .card-value {
+    font-size: 18px;
+  }
+
+  .card-label {
+    font-size: 12px;
+  }
+
+  .card-change {
+    font-size: 12px;
+  }
+
+  .chart {
+    height: 250px;
+  }
+
+  .chart-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .symbol-select {
+    width: 100%;
+  }
+
+  /* Holdings mobile */
+  .holdings {
+    padding: 16px;
+  }
+
+  .holdings-header {
+    display: none;
+  }
+
+  .holdings-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px 0;
+  }
+
+  .col-symbol {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .col-shares, .col-price, .col-value {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    font-size: 13px;
+  }
+
+  .col-shares::before { content: 'Shares: '; color: var(--text-muted); }
+  .col-price::before { content: 'Price: '; color: var(--text-muted); }
+  .col-value::before { content: 'Value: '; color: var(--text-muted); }
+
+  .col-pnl {
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .col-pnl::before { content: 'P&L: '; color: var(--text-muted); }
+
+  /* Transaction mobile */
+  .transaction-history {
+    padding: 16px;
+  }
+
+  .transaction-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+  }
+
+  .tx-left {
+    width: 100%;
+  }
+
+  .tx-center {
+    padding: 0;
+    width: 100%;
+  }
+
+  .tx-right {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Admin mobile */
+  .admin-section {
+    padding: 16px;
   }
 
   .admin-grid {
     grid-template-columns: 1fr;
+  }
+
+  .holding-edit-row {
+    flex-wrap: wrap;
+  }
+
+  .holding-edit-row .holding-symbol {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .holding-edit-row input {
+    min-width: calc(50% - 6px);
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .form-row input,
+  .form-row select {
+    width: 100%;
+  }
+
+  .tx-edit-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tx-edit-row .tx-asset,
+  .tx-edit-row .tx-amount,
+  .tx-edit-row .tx-date {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .balance-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .card-value {
+    font-size: 20px;
   }
 }
