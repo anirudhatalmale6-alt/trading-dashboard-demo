@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { RefreshCw, Plus, Trash2 } from 'lucide-react';
+import { ChevronLeft, RefreshCw, Plus, Trash2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 
 const Admin = () => {
+  const navigate = useNavigate();
   const {
     balances,
     updateBalance,
@@ -10,268 +12,174 @@ const Admin = () => {
     updateHolding,
     addHolding,
     deleteHolding,
-    transactions,
-    addTransaction,
-    deleteTransaction,
+    marketData,
+    updateMarketCoin,
     regenerateChartData,
   } = useData();
-
-  const [newTransaction, setNewTransaction] = useState({
-    type: 'dividend',
-    asset: '',
-    amount: '',
-    description: '',
-  });
 
   const [newHolding, setNewHolding] = useState({
     symbol: '',
     name: '',
-    shares: '',
-    avgPrice: '',
-    currentPrice: '',
+    amount: '',
+    usdValue: '',
+    icon: '',
   });
-
-  const handleAddTransaction = (e) => {
-    e.preventDefault();
-    if (!newTransaction.asset || !newTransaction.amount) return;
-
-    addTransaction({
-      ...newTransaction,
-      amount: parseFloat(newTransaction.amount),
-    });
-
-    setNewTransaction({
-      type: 'dividend',
-      asset: '',
-      amount: '',
-      description: '',
-    });
-  };
 
   const handleAddHolding = (e) => {
     e.preventDefault();
-    if (!newHolding.symbol || !newHolding.shares) return;
+    if (!newHolding.symbol || !newHolding.amount) return;
 
     addHolding({
       ...newHolding,
-      shares: parseFloat(newHolding.shares),
-      avgPrice: parseFloat(newHolding.avgPrice),
-      currentPrice: parseFloat(newHolding.currentPrice),
+      amount: parseFloat(newHolding.amount),
+      usdValue: parseFloat(newHolding.usdValue),
     });
 
-    setNewHolding({
-      symbol: '',
-      name: '',
-      shares: '',
-      avgPrice: '',
-      currentPrice: '',
-    });
+    setNewHolding({ symbol: '', name: '', amount: '', usdValue: '', icon: '' });
   };
 
   return (
-    <div className="admin">
-      <h1 className="page-title">Admin Panel</h1>
-      <p className="admin-description">
-        Adjust values for demo and testing purposes.
-      </p>
+    <div className="admin-page">
+      <div className="page-title-with-back">
+        <button className="back-btn" onClick={() => navigate(-1)}>
+          <ChevronLeft size={24} />
+        </button>
+        <div className="page-title-text">Admin Panel</div>
+      </div>
 
-      {/* Balance Controls */}
-      <section className="admin-section">
-        <h2 className="section-title">Balance Settings</h2>
-        <div className="admin-grid">
-          <div className="admin-field">
-            <label>Total Equity ($)</label>
-            <input
-              type="number"
-              value={balances.totalEquity.toFixed(2)}
-              onChange={(e) => updateBalance('totalEquity', e.target.value)}
-            />
-          </div>
-          <div className="admin-field">
-            <label>Available Cash ($)</label>
-            <input
-              type="number"
-              value={balances.availableCash.toFixed(2)}
-              onChange={(e) => updateBalance('availableCash', e.target.value)}
-            />
-          </div>
-          <div className="admin-field">
-            <label>Invested Amount ($)</label>
-            <input
-              type="number"
-              value={balances.investedAmount.toFixed(2)}
-              onChange={(e) => updateBalance('investedAmount', e.target.value)}
-            />
-          </div>
-          <div className="admin-field">
-            <label>Daily P&L ($)</label>
-            <input
-              type="number"
-              value={balances.dailyPnL.toFixed(2)}
-              onChange={(e) => updateBalance('dailyPnL', e.target.value)}
-            />
-          </div>
-          <div className="admin-field">
-            <label>Total P&L ($)</label>
-            <input
-              type="number"
-              value={balances.totalPnL.toFixed(2)}
-              onChange={(e) => updateBalance('totalPnL', e.target.value)}
-            />
-          </div>
-          <div className="admin-field">
-            <label>Total P&L (%)</label>
-            <input
-              type="number"
-              value={balances.totalPnLPercent.toFixed(2)}
-              onChange={(e) => updateBalance('totalPnLPercent', e.target.value)}
-            />
-          </div>
+      {/* Balance Settings */}
+      <div className="admin-section">
+        <div className="admin-section-title">Balance Settings</div>
+        <div className="admin-field">
+          <label>Total Assets (USDT)</label>
+          <input
+            type="number"
+            value={balances.totalAssets.toFixed(2)}
+            onChange={(e) => updateBalance('totalAssets', e.target.value)}
+          />
         </div>
-      </section>
+        <div className="admin-field">
+          <label>Today's Earnings</label>
+          <input
+            type="number"
+            value={balances.todayEarnings.toFixed(2)}
+            onChange={(e) => updateBalance('todayEarnings', e.target.value)}
+          />
+        </div>
+        <div className="admin-field">
+          <label>User ID</label>
+          <input
+            type="text"
+            value={balances.uid}
+            onChange={(e) => updateBalance('uid', e.target.value)}
+          />
+        </div>
+      </div>
 
       {/* Chart Controls */}
-      <section className="admin-section">
-        <h2 className="section-title">Chart Data</h2>
-        <button className="btn btn-primary" onClick={regenerateChartData}>
-          <RefreshCw size={16} />
+      <div className="admin-section">
+        <div className="admin-section-title">Chart Data</div>
+        <button className="admin-btn" onClick={regenerateChartData}>
+          <RefreshCw size={16} style={{ marginRight: 8 }} />
           Regenerate Chart Data
         </button>
-      </section>
+      </div>
+
+      {/* Market Prices */}
+      <div className="admin-section">
+        <div className="admin-section-title">Market Prices</div>
+        {marketData.slice(0, 5).map((coin) => (
+          <div key={coin.symbol} style={{ marginBottom: 12 }}>
+            <div style={{ fontSize: 12, color: '#888', marginBottom: 4 }}>{coin.symbol}/USDT</div>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <input
+                type="number"
+                placeholder="Price"
+                value={coin.price.toFixed(2)}
+                onChange={(e) => updateMarketCoin(coin.symbol, 'price', e.target.value)}
+                style={{ flex: 1, padding: '8px 12px', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: 6, color: '#fff' }}
+              />
+              <input
+                type="number"
+                placeholder="Change %"
+                value={coin.change.toFixed(2)}
+                onChange={(e) => updateMarketCoin(coin.symbol, 'change', e.target.value)}
+                style={{ width: 80, padding: '8px 12px', background: '#1a1a1a', border: '1px solid #2a2a2a', borderRadius: 6, color: '#fff' }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
 
       {/* Holdings Management */}
-      <section className="admin-section">
-        <h2 className="section-title">Holdings Management</h2>
-        <div className="holdings-admin">
-          {holdings.map((holding) => (
-            <div key={holding.symbol} className="holding-edit-row">
-              <span className="holding-symbol">{holding.symbol}</span>
-              <input
-                type="number"
-                placeholder="Shares"
-                value={holding.shares}
-                onChange={(e) => updateHolding(holding.symbol, 'shares', e.target.value)}
-              />
-              <input
-                type="number"
-                placeholder="Avg Price"
-                value={holding.avgPrice.toFixed(2)}
-                onChange={(e) => updateHolding(holding.symbol, 'avgPrice', e.target.value)}
-              />
-              <input
-                type="number"
-                placeholder="Current Price"
-                value={holding.currentPrice.toFixed(2)}
-                onChange={(e) => updateHolding(holding.symbol, 'currentPrice', e.target.value)}
-              />
-              <button
-                className="btn btn-danger btn-sm"
-                onClick={() => deleteHolding(holding.symbol)}
-              >
-                <Trash2 size={16} />
-              </button>
-            </div>
-          ))}
-        </div>
-
-        <form className="add-form" onSubmit={handleAddHolding}>
-          <h3>Add New Holding</h3>
-          <div className="form-row">
+      <div className="admin-section">
+        <div className="admin-section-title">Holdings</div>
+        {holdings.map((holding) => (
+          <div key={holding.symbol} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12, padding: 12, background: '#1a1a1a', borderRadius: 8 }}>
+            <span style={{ fontWeight: 600, minWidth: 50 }}>{holding.symbol}</span>
             <input
-              type="text"
-              placeholder="Symbol (e.g., AAPL)"
-              value={newHolding.symbol}
-              onChange={(e) => setNewHolding({ ...newHolding, symbol: e.target.value.toUpperCase() })}
-            />
-            <input
-              type="text"
-              placeholder="Company Name"
-              value={newHolding.name}
-              onChange={(e) => setNewHolding({ ...newHolding, name: e.target.value })}
+              type="number"
+              value={holding.amount}
+              onChange={(e) => updateHolding(holding.symbol, 'amount', e.target.value)}
+              style={{ flex: 1, padding: '8px', background: '#111', border: '1px solid #2a2a2a', borderRadius: 4, color: '#fff' }}
             />
             <input
               type="number"
-              placeholder="Shares"
-              value={newHolding.shares}
-              onChange={(e) => setNewHolding({ ...newHolding, shares: e.target.value })}
+              value={holding.usdValue.toFixed(2)}
+              onChange={(e) => updateHolding(holding.symbol, 'usdValue', e.target.value)}
+              style={{ width: 100, padding: '8px', background: '#111', border: '1px solid #2a2a2a', borderRadius: 4, color: '#fff' }}
             />
-            <input
-              type="number"
-              placeholder="Avg Price"
-              value={newHolding.avgPrice}
-              onChange={(e) => setNewHolding({ ...newHolding, avgPrice: e.target.value })}
-            />
-            <input
-              type="number"
-              placeholder="Current Price"
-              value={newHolding.currentPrice}
-              onChange={(e) => setNewHolding({ ...newHolding, currentPrice: e.target.value })}
-            />
-            <button type="submit" className="btn btn-primary">
-              <Plus size={16} />
-              Add
-            </button>
-          </div>
-        </form>
-      </section>
-
-      {/* Transaction Management */}
-      <section className="admin-section">
-        <h2 className="section-title">Transaction Management</h2>
-
-        <form className="add-form" onSubmit={handleAddTransaction}>
-          <h3>Add New Transaction</h3>
-          <div className="form-row">
-            <select
-              value={newTransaction.type}
-              onChange={(e) => setNewTransaction({ ...newTransaction, type: e.target.value })}
+            <button
+              onClick={() => deleteHolding(holding.symbol)}
+              style={{ padding: 8, background: 'transparent', border: '1px solid #f6465d', borderRadius: 4, color: '#f6465d', cursor: 'pointer' }}
             >
-              <option value="dividend">Dividend</option>
-              <option value="buy">Buy</option>
-              <option value="sell">Sell</option>
-            </select>
-            <input
-              type="text"
-              placeholder="Asset (e.g., AAPL)"
-              value={newTransaction.asset}
-              onChange={(e) => setNewTransaction({ ...newTransaction, asset: e.target.value.toUpperCase() })}
-            />
-            <input
-              type="number"
-              placeholder="Amount"
-              value={newTransaction.amount}
-              onChange={(e) => setNewTransaction({ ...newTransaction, amount: e.target.value })}
-            />
-            <input
-              type="text"
-              placeholder="Description"
-              value={newTransaction.description}
-              onChange={(e) => setNewTransaction({ ...newTransaction, description: e.target.value })}
-            />
-            <button type="submit" className="btn btn-primary">
-              <Plus size={16} />
-              Add
+              <Trash2 size={16} />
             </button>
           </div>
-        </form>
+        ))}
 
-        <div className="transactions-admin">
-          {transactions.slice(0, 10).map((tx) => (
-            <div key={tx.id} className="tx-edit-row">
-              <span className="tx-type-badge">{tx.type}</span>
-              <span className="tx-asset">{tx.asset}</span>
-              <span className="tx-amount">${Math.abs(tx.amount).toFixed(2)}</span>
-              <span className="tx-date">{tx.date}</span>
-              <button
-                className="btn btn-danger btn-sm"
-                onClick={() => deleteTransaction(tx.id)}
-              >
-                <Trash2 size={16} />
+        <div style={{ marginTop: 16, padding: 16, background: '#1a1a1a', borderRadius: 8 }}>
+          <div style={{ fontSize: 13, color: '#888', marginBottom: 12 }}>Add New Holding</div>
+          <form onSubmit={handleAddHolding}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <input
+                type="text"
+                placeholder="Symbol (e.g., SOL)"
+                value={newHolding.symbol}
+                onChange={(e) => setNewHolding({ ...newHolding, symbol: e.target.value.toUpperCase() })}
+                style={{ padding: '10px 12px', background: '#111', border: '1px solid #2a2a2a', borderRadius: 6, color: '#fff' }}
+              />
+              <input
+                type="text"
+                placeholder="Name"
+                value={newHolding.name}
+                onChange={(e) => setNewHolding({ ...newHolding, name: e.target.value })}
+                style={{ padding: '10px 12px', background: '#111', border: '1px solid #2a2a2a', borderRadius: 6, color: '#fff' }}
+              />
+              <div style={{ display: 'flex', gap: 8 }}>
+                <input
+                  type="number"
+                  placeholder="Amount"
+                  value={newHolding.amount}
+                  onChange={(e) => setNewHolding({ ...newHolding, amount: e.target.value })}
+                  style={{ flex: 1, padding: '10px 12px', background: '#111', border: '1px solid #2a2a2a', borderRadius: 6, color: '#fff' }}
+                />
+                <input
+                  type="number"
+                  placeholder="USD Value"
+                  value={newHolding.usdValue}
+                  onChange={(e) => setNewHolding({ ...newHolding, usdValue: e.target.value })}
+                  style={{ flex: 1, padding: '10px 12px', background: '#111', border: '1px solid #2a2a2a', borderRadius: 6, color: '#fff' }}
+                />
+              </div>
+              <button type="submit" className="admin-btn">
+                <Plus size={16} style={{ marginRight: 8 }} />
+                Add Holding
               </button>
             </div>
-          ))}
+          </form>
         </div>
-      </section>
+      </div>
     </div>
   );
 };

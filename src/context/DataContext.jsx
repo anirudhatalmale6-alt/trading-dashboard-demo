@@ -3,6 +3,9 @@ import {
   initialBalances,
   initialTransactions,
   initialHoldings,
+  initialAccounts,
+  initialMarketData,
+  initialTickerData,
   initialCandlestickData,
   initialVolumeData,
 } from '../data/mockData';
@@ -21,31 +24,39 @@ export const DataProvider = ({ children }) => {
   const [balances, setBalances] = useState(initialBalances);
   const [transactions, setTransactions] = useState(initialTransactions);
   const [holdings, setHoldings] = useState(initialHoldings);
+  const [accounts, setAccounts] = useState(initialAccounts);
+  const [marketData, setMarketData] = useState(initialMarketData);
+  const [tickerData, setTickerData] = useState(initialTickerData);
   const [candlestickData, setCandlestickData] = useState(initialCandlestickData);
   const [volumeData, setVolumeData] = useState(initialVolumeData);
-  const [selectedSymbol, setSelectedSymbol] = useState('PORTFOLIO');
+  const [selectedPair, setSelectedPair] = useState('BTC/USDT');
 
   // Simulate real-time price updates
   useEffect(() => {
     const interval = setInterval(() => {
-      setBalances(prev => {
-        const change = (Math.random() - 0.5) * 100;
-        const newDailyPnL = prev.dailyPnL + change;
-        return {
-          ...prev,
-          totalEquity: prev.totalEquity + change,
-          dailyPnL: newDailyPnL,
-          dailyPnLPercent: (newDailyPnL / (prev.totalEquity - prev.dailyPnL)) * 100,
-        };
-      });
-
-      // Update holdings prices slightly
-      setHoldings(prev =>
-        prev.map(holding => ({
-          ...holding,
-          currentPrice: holding.currentPrice * (1 + (Math.random() - 0.5) * 0.002),
+      // Update market data
+      setMarketData(prev =>
+        prev.map(coin => ({
+          ...coin,
+          price: coin.price * (1 + (Math.random() - 0.5) * 0.002),
+          change: coin.change + (Math.random() - 0.5) * 0.1,
         }))
       );
+
+      // Update ticker
+      setTickerData(prev =>
+        prev.map(ticker => ({
+          ...ticker,
+          price: ticker.price * (1 + (Math.random() - 0.5) * 0.001),
+        }))
+      );
+
+      // Update balances
+      setBalances(prev => ({
+        ...prev,
+        totalAssets: prev.totalAssets + (Math.random() - 0.5) * 10,
+        todayEarnings: prev.todayEarnings + (Math.random() - 0.5) * 5,
+      }));
     }, 3000);
 
     return () => clearInterval(interval);
@@ -64,6 +75,7 @@ export const DataProvider = ({ children }) => {
       ...transaction,
       id: Date.now(),
       date: new Date().toISOString().split('T')[0],
+      status: 'completed',
     };
     setTransactions(prev => [newTransaction, ...prev]);
   };
@@ -88,16 +100,24 @@ export const DataProvider = ({ children }) => {
     setHoldings(prev => prev.filter(h => h.symbol !== symbol));
   };
 
+  const updateMarketCoin = (symbol, field, value) => {
+    setMarketData(prev =>
+      prev.map(c =>
+        c.symbol === symbol ? { ...c, [field]: parseFloat(value) || 0 } : c
+      )
+    );
+  };
+
   const regenerateChartData = () => {
     const newData = [];
-    let basePrice = 100;
+    let basePrice = 95000;
     const now = new Date();
 
     for (let i = 90; i >= 0; i--) {
       const date = new Date(now);
       date.setDate(date.getDate() - i);
 
-      const volatility = 0.02 + Math.random() * 0.03;
+      const volatility = 0.015 + Math.random() * 0.025;
       const trend = Math.random() > 0.5 ? 1 : -1;
 
       const open = basePrice;
@@ -122,7 +142,7 @@ export const DataProvider = ({ children }) => {
       newData.map(candle => ({
         time: candle.time,
         value: Math.floor(100000 + Math.random() * 500000),
-        color: candle.close >= candle.open ? '#26a69a' : '#ef5350',
+        color: candle.close >= candle.open ? '#0ecb81' : '#f6465d',
       }))
     );
   };
@@ -131,16 +151,20 @@ export const DataProvider = ({ children }) => {
     balances,
     transactions,
     holdings,
+    accounts,
+    marketData,
+    tickerData,
     candlestickData,
     volumeData,
-    selectedSymbol,
-    setSelectedSymbol,
+    selectedPair,
+    setSelectedPair,
     updateBalance,
     addTransaction,
     deleteTransaction,
     updateHolding,
     addHolding,
     deleteHolding,
+    updateMarketCoin,
     regenerateChartData,
   };
 
