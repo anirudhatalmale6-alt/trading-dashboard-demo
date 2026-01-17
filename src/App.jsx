@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { DataProvider } from './context/DataContext';
 import Sidebar from './components/Sidebar';
 import MobileNav from './components/MobileNav';
@@ -9,7 +9,7 @@ import './styles/main.css';
 function App() {
   return (
     <DataProvider>
-      <BrowserRouter>
+      <HashRouter>
         <div className="app-layout">
           <Sidebar />
           <MobileNav />
@@ -20,7 +20,7 @@ function App() {
             </Routes>
           </main>
         </div>
-      </BrowserRouter>
+      </HashRouter>
     </DataProvider>
   );
 }
