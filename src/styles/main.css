@@ -1,0 +1,612 @@
+/* Trading Dashboard - Dark Theme */
+:root {
+  --bg-primary: #0f0f1a;
+  --bg-secondary: #1a1a2e;
+  --bg-tertiary: #252540;
+  --text-primary: #ffffff;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  --accent-primary: #6366f1;
+  --accent-hover: #4f46e5;
+  --positive: #10b981;
+  --negative: #ef4444;
+  --border: #2a2a4a;
+  --sidebar-width: 240px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+/* Layout */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  padding: 24px;
+  max-width: calc(100vw - var(--sidebar-width));
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  padding: 20px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.logo-icon {
+  color: var(--accent-primary);
+  width: 32px;
+  height: 32px;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.nav-item:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.nav-item.active {
+  background: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+/* Page Title */
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+/* Balance Cards */
+.balance-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.balance-card {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--border);
+}
+
+.balance-card.main {
+  grid-column: span 1;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.card-icon {
+  color: var(--accent-primary);
+  width: 20px;
+  height: 20px;
+}
+
+.card-label {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.card-value {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.card-value.positive {
+  color: var(--positive);
+}
+
+.card-value.negative {
+  color: var(--negative);
+}
+
+.card-change {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.card-change.positive {
+  color: var(--positive);
+}
+
+.card-change.negative {
+  color: var(--negative);
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+/* Chart Container */
+.chart-container {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--border);
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.symbol-select {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.chart {
+  height: 400px;
+  width: 100%;
+}
+
+/* Holdings */
+.holdings {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--border);
+}
+
+.holdings-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.holdings-header,
+.holdings-row {
+  display: grid;
+  grid-template-columns: 1.5fr 0.8fr 1fr 1fr 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  align-items: center;
+}
+
+.holdings-header {
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+}
+
+.holdings-row {
+  border-bottom: 1px solid var(--border);
+}
+
+.holdings-row:last-child {
+  border-bottom: none;
+}
+
+.symbol-name {
+  font-weight: 600;
+}
+
+.symbol-company {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.col-pnl {
+  text-align: right;
+}
+
+.col-pnl.positive {
+  color: var(--positive);
+}
+
+.col-pnl.negative {
+  color: var(--negative);
+}
+
+.pnl-percent {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+/* Transaction History */
+.transaction-history {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid var(--border);
+}
+
+.transaction-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.transaction-item:last-child {
+  border-bottom: none;
+}
+
+.tx-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tx-icon {
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border-radius: 8px;
+  background: var(--bg-tertiary);
+}
+
+.tx-icon.buy {
+  color: var(--negative);
+}
+
+.tx-icon.sell {
+  color: var(--positive);
+}
+
+.tx-icon.dividend {
+  color: var(--positive);
+}
+
+.tx-asset {
+  font-weight: 600;
+}
+
+.tx-type {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.tx-center {
+  flex: 1;
+  padding: 0 24px;
+}
+
+.tx-description {
+  color: var(--text-secondary);
+}
+
+.tx-details {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.tx-right {
+  text-align: right;
+}
+
+.tx-amount {
+  font-weight: 600;
+}
+
+.tx-amount.positive {
+  color: var(--positive);
+}
+
+.tx-amount.negative {
+  color: var(--negative);
+}
+
+.tx-date {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Admin Panel */
+.admin {
+  max-width: 1200px;
+}
+
+.admin-description {
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+}
+
+.admin-section {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-field label {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.admin-field input {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.admin-field input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--negative);
+  border: 1px solid var(--negative);
+}
+
+.btn-danger:hover {
+  background: var(--negative);
+  color: white;
+}
+
+.btn-sm {
+  padding: 6px 10px;
+}
+
+/* Holdings Admin */
+.holdings-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.holding-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+}
+
+.holding-edit-row .holding-symbol {
+  font-weight: 600;
+  min-width: 60px;
+}
+
+.holding-edit-row input {
+  flex: 1;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+/* Add Forms */
+.add-form {
+  background: var(--bg-tertiary);
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.add-form h3 {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.form-row input,
+.form-row select {
+  flex: 1;
+  min-width: 120px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.form-row input:focus,
+.form-row select:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+}
+
+/* Transactions Admin */
+.transactions-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.tx-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--bg-tertiary);
+  border-radius: 8px;
+}
+
+.tx-type-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  text-transform: uppercase;
+  background: var(--accent-primary);
+  color: white;
+}
+
+.tx-edit-row .tx-asset {
+  min-width: 60px;
+  font-weight: 600;
+}
+
+.tx-edit-row .tx-amount {
+  min-width: 80px;
+}
+
+.tx-edit-row .tx-date {
+  color: var(--text-muted);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .balance-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .main-content {
+    margin-left: 0;
+    max-width: 100vw;
+  }
+
+  .balance-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .holdings-header,
+  .holdings-row {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
