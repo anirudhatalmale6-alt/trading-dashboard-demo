@@ -1,7 +1,10 @@
 import { NavLink } from 'react-router-dom';
-import { Home, TrendingUp, Target, FileText, User } from 'lucide-react';
+import { Home, TrendingUp, Target, Settings, User } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const BottomNav = () => {
+  const { isAdmin } = useAuth();
+
   return (
     <nav className="bottom-nav">
       <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
@@ -22,12 +25,14 @@ const BottomNav = () => {
         </div>
         <span>Trade</span>
       </NavLink>
-      <NavLink to="/admin" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-        <div className="nav-icon">
-          <FileText size={22} />
-        </div>
-        <span>Financial</span>
-      </NavLink>
+      {isAdmin() && (
+        <NavLink to="/admin" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+          <div className="nav-icon">
+            <Settings size={22} />
+          </div>
+          <span>Admin</span>
+        </NavLink>
+      )}
       <NavLink to="/funds" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
         <div className="nav-icon">
           <User size={22} />
