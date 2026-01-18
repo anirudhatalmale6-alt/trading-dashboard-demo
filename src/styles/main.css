@@ -34,6 +34,18 @@ body {
   max-width: 100%;
   min-height: 100vh;
   padding-bottom: 70px;
+  background-color: var(--bg-primary);
+}
+
+/* Page Containers */
+.home-page,
+.market-page,
+.trade-page,
+.funds-page,
+.chart-page,
+.admin-page {
+  min-height: calc(100vh - 70px);
+  background-color: var(--bg-primary);
 }
 
 /* Top Header */

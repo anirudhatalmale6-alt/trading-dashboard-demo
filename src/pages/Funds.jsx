@@ -6,6 +6,10 @@ const Funds = () => {
   const { balances, accounts } = useData();
   const [activeTab, setActiveTab] = useState('total');
 
+  if (!balances || !accounts) {
+    return <div style={{ padding: 20, textAlign: 'center' }}>Loading...</div>;
+  }
+
   const formatNumber = (num) => {
     return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };

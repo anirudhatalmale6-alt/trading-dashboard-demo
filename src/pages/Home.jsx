@@ -5,6 +5,7 @@ const Home = () => {
   const { tickerData } = useData();
 
   const formatPrice = (price) => {
+    if (!price) return '0.00';
     if (price >= 1000) {
       return price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
@@ -35,7 +36,7 @@ const Home = () => {
 
       {/* Crypto Ticker */}
       <div className="crypto-ticker">
-        {tickerData.map((ticker, index) => (
+        {(tickerData || []).map((ticker, index) => (
           <div key={index} className="ticker-item">
             <div className="ticker-pair">
               {ticker.pair.split('/')[0]}/<span style={{ color: '#666' }}>{ticker.pair.split('/')[1]}</span>

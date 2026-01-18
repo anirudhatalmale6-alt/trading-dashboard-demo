@@ -110,7 +110,7 @@ const Market = () => {
 
       {/* Market List */}
       <div className="market-list">
-        {marketData.map((coin, index) => (
+        {(marketData || []).map((coin, index) => (
           <div key={index} className="market-item">
             <div className="coin-info">
               <div className={`coin-icon ${getCoinIconClass(coin.symbol)}`}>
