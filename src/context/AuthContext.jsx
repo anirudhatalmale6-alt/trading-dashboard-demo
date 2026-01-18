@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Check for saved session
-    const savedUser = localStorage.getItem('txo_user');
+    const savedUser = localStorage.getItem('optitrade_user');
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
@@ -37,7 +37,7 @@ export const AuthProvider = ({ children }) => {
     if (foundUser) {
       const userData = { username: foundUser.username, role: foundUser.role };
       setUser(userData);
-      localStorage.setItem('txo_user', JSON.stringify(userData));
+      localStorage.setItem('optitrade_user', JSON.stringify(userData));
       return { success: true };
     }
 
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('txo_user');
+    localStorage.removeItem('optitrade_user');
   };
 
   const isAdmin = () => user?.role === 'admin';

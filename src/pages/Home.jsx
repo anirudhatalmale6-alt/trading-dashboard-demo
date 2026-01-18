@@ -28,7 +28,7 @@ const Home = () => {
 
       {/* Promo Banner */}
       <div className="promo-banner">
-        <div className="promo-badge">TXO Exchange</div>
+        <div className="promo-badge">Optitrade</div>
         <div style={{ marginTop: 8, fontSize: 12, color: '#888' }}>EXPERT ORDERS</div>
         <div className="promo-title">One Tap Access</div>
         <div className="promo-subtitle">Copy Expert Orders and Enjoy the Returns</div>

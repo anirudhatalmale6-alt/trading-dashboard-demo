@@ -38,7 +38,7 @@ const Login = () => {
           <div className="logo-circle">
             <TrendingUp size={32} />
           </div>
-          <h1 className="login-title">TXO Exchange</h1>
+          <h1 className="login-title">Optitrade</h1>
           <p className="login-subtitle">Sign in to continue</p>
         </div>
 
