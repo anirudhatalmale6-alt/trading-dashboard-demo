@@ -33,8 +33,29 @@ body {
 .app {
   max-width: 100%;
   min-height: 100vh;
-  padding-bottom: 70px;
+  min-height: -webkit-fill-available;
   background-color: var(--bg-primary);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.app-content {
+  flex: 1;
+  padding-bottom: 70px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Loading Screen */
+.loading-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--accent-gold);
+  font-size: 16px;
 }
 
 /* Page Containers */
@@ -716,9 +737,11 @@ body {
   border-top: 1px solid var(--border);
   display: flex;
   justify-content: space-around;
-  padding: 8px 0;
-  padding-bottom: max(8px, env(safe-area-inset-bottom));
-  z-index: 100;
+  padding: 10px 0;
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+  z-index: 1000;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .nav-item {
@@ -729,10 +752,13 @@ body {
   background: none;
   border: none;
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 11px;
   cursor: pointer;
-  padding: 4px 12px;
+  padding: 6px 14px;
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  min-width: 60px;
 }
 
 .nav-item.active {

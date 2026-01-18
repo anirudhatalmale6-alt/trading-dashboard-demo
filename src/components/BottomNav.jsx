@@ -7,7 +7,7 @@ const BottomNav = () => {
 
   return (
     <nav className="bottom-nav">
-      <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+      <NavLink to="/" end className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
         <div className="nav-icon">
           <Home size={22} />
         </div>
